@@ -1,0 +1,41 @@
+import java.util.*;
+
+
+public class Dateur {
+  private Timer t;
+  private FenetrePersonnalisee b;
+
+  public Dateur(FenetrePersonnalisee b){
+	
+	  this.b = b;
+	  t = new Timer();
+	  t.scheduleAtFixedRate(new MonAction(), 0, 30000);
+    }
+
+  class MonAction extends TimerTask {
+	    
+
+	    public void run() {
+
+	    	  b.tickAction();
+	 
+	      
+	    }
+	  }
+
+  public FenetrePersonnalisee getB() {
+	  return b;
+  }
+
+  public void setB(FenetrePersonnalisee b) {
+	  this.b = b;
+  }
+
+  public Timer getT() {
+	  return t;
+  }
+
+  public void setT(Timer t) {
+	  this.t = t;
+  }
+}

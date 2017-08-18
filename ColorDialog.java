@@ -1,0 +1,101 @@
+import java.awt.event.*;
+
+import javax.swing.*;
+
+import java.awt.*;
+import java.security.acl.Owner;
+/**
+ * Ce code contient les méthodes cd la boite de dialogue qui concerne<br/>
+ * la paramétrisation des couleurs du jeu par l'utilisateur.
+ */
+
+public class ColorDialog extends JDialog implements ActionListener{
+
+  /**Initialisation de la couleur*/
+  public Color color = Color.WHITE;
+  /**Contient le nom de la Frame parente*/
+  FenetreOptions parentFrame;
+  int test;
+  
+  JButton grui;
+
+  /**Création du bouton "Ok"*/
+  JButton jButtonOk = new JButton();
+  /**Création du bouton "Camcel"*/
+  JButton jButtonCancel = new JButton();
+  /**Création du panel qui contient les divers éléments de l'interface*/
+  JPanel jPanel1 = new JPanel();
+  /**Création de la palette pour le choix des couleurs*/
+  JColorChooser jColorChooser1 = new JColorChooser();
+  /**Un spinner pour définir l'alpha (la transparence)*/
+  JSpinner jSpinnerAlpha = new JSpinner(new SpinnerNumberModel(color.getAlpha(),0 ,255, 1));
+  /**Contien le label "alpha"*/
+  JLabel jLabel1 = new JLabel();
+  /**
+   * Boite de dialogue gérant les couleurs
+   * @param owner
+   */
+  public ColorDialog(FenetreOptions owner, Gestionnaire g, JButton grui, int test) {
+    super(owner,"Set Color",true);
+    parentFrame = owner;
+    this.grui = grui;
+    this.test = test;
+
+    setSize(500,405);
+    setResizable(false);
+    setLocationRelativeTo(null);
+
+    jButtonOk.setText("Ok");
+    jButtonOk.setBounds(new Rectangle(12, 332, 119, 44));
+    jButtonCancel.setText("Cancel");
+    jButtonCancel.setBounds(new Rectangle(150, 332, 119, 44));
+    jColorChooser1.setBounds(new Rectangle(0,0,500,330));
+    jSpinnerAlpha.setBounds(new Rectangle(390,340,51,27));
+    jLabel1.setBounds(new Rectangle(350,340,40,27));
+    jLabel1.setText("Alpha");
+    jPanel1.setLayout(null);
+
+    Container contents = getContentPane();
+    contents.add(jPanel1, BorderLayout.CENTER);
+    jPanel1.add(jColorChooser1, null);
+    jPanel1.add(jButtonOk, null);
+    jPanel1.add(jButtonCancel, null);
+    jPanel1.add(jSpinnerAlpha,null);
+    jPanel1.add(jLabel1,null);
+    
+    
+
+    jButtonOk.addActionListener(this);
+    jButtonCancel.addActionListener(this);
+
+    setAlwaysOnTop(true);
+    setVisible(true);
+  }
+  
+  public void actionPerformed(ActionEvent evt) {
+	  if (evt.getSource()instanceof JButton)  {
+			String ChoixOption = evt.getActionCommand();
+			if (ChoixOption.equals("Ok")){
+				color =new Color( jColorChooser1.getColor().getRed(),jColorChooser1.getColor().getGreen(),jColorChooser1.getColor().getBlue(),((SpinnerNumberModel)jSpinnerAlpha.getModel()).getNumber().intValue());
+				grui.setBackground(color);
+				if(test == 0){
+					parentFrame.setNouveau(new Settings(parentFrame.getNouveau().getNumTable(),color,parentFrame.getNouveau().getTextColor(),parentFrame.getNouveau().getCost(), parentFrame.getNouveau().getSecondaryCost(),false,parentFrame.getNouveau().isPersonalise()));
+				}
+				else{
+					parentFrame.setNouveau(new Settings(parentFrame.getNouveau().getNumTable(),parentFrame.getNouveau().getLabelColor(),color,parentFrame.getNouveau().getCost(), parentFrame.getNouveau().getSecondaryCost(),false,parentFrame.getNouveau().isPersonalise()));
+				}
+				this.dispose();
+			}
+			else {
+				this.dispose();
+			}
+		}
+  }
+  /**
+   * retourne la couleur sélectionnée
+   * @return color
+   */
+  public Color getColor(){
+    return color;
+  }
+}
